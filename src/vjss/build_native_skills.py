@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-import os, sys, re, json, shutil
+import os, sys, re, json, glob
 
 REPO_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 CATEGORIES_DIR = os.path.join(REPO_DIR, "categories")
 TXT_SKILLS_DIR = os.path.join(REPO_DIR, "txt_skills")
 GLOBAL_SKILLS_DIR = os.path.expanduser("~/.gemini/config/skills")
 WORKSPACE_SKILLS_DIR = os.path.join(os.getcwd(), ".agents", "skills")
+WEB_SKILLS_JSON = os.path.join(REPO_DIR, "web", "skills.json")
 
 CATEGORY_MAP = {
     "01_AI_ML_DataScience": "AI, Machine Learning, Data Science & Vector Databases",
@@ -17,388 +18,15 @@ CATEGORY_MAP = {
     "07_Scientific_Research_PhD_Academic": "PhD Doctoral Research, Academic Publishing & Bioinformatics"
 }
 
-SKILL_TO_CAT = {
-    "vjss-ai-integrator": "01_AI_ML_DataScience",
-    "vjss-ai-research-director": "01_AI_ML_DataScience",
-    "vjss-datacleaner": "01_AI_ML_DataScience",
-    "vjss-data-pipeline-l1": "01_AI_ML_DataScience",
-    "vjss-geminiapidev": "01_AI_ML_DataScience",
-    "vjss-math-optimizer-l3": "01_AI_ML_DataScience",
-    "vjss-ml-engineer-l2": "01_AI_ML_DataScience",
-    "vjss-nlp-specialist": "01_AI_ML_DataScience",
-    "vjss-ollamalocalexpert": "01_AI_ML_DataScience",
-    "vjss-pandasdatawizard": "01_AI_ML_DataScience",
-    "vjss-promptengineer": "01_AI_ML_DataScience",
-    "vjss-pytorchdev": "01_AI_ML_DataScience",
-    "vjss-ragarchitect": "01_AI_ML_DataScience",
-    "vjss-scikitlearnexpert": "01_AI_ML_DataScience",
-    "vjss-superdata": "01_AI_ML_DataScience",
-    "vjss-superintelligent": "01_AI_ML_DataScience",
-    "vjss-tensorflowpro": "01_AI_ML_DataScience",
-    "vjss-vector-db-admin": "01_AI_ML_DataScience",
+# Import or define DOMAIN_MAP
+from enrich_all_161_skills import DOMAIN_MAP, to_camel
 
-    "vjss-ansibleexpert": "02_Backend_Cloud_DevOps",
-    "vjss-awsarchitect": "02_Backend_Cloud_DevOps",
-    "vjss-azurearchitect": "02_Backend_Cloud_DevOps",
-    "vjss-ci-cd-pipeline-builder": "02_Backend_Cloud_DevOps",
-    "vjss-compression-wiz": "02_Backend_Cloud_DevOps",
-    "vjss-datacenter-sme": "02_Backend_Cloud_DevOps",
-    "vjss-djangoexpert": "02_Backend_Cloud_DevOps",
-    "vjss-dockermaster": "02_Backend_Cloud_DevOps",
-    "vjss-fintech-devops": "02_Backend_Cloud_DevOps",
-    "vjss-fullstack-l3-lead": "02_Backend_Cloud_DevOps",
-    "vjss-gcp-pro": "02_Backend_Cloud_DevOps",
-    "vjss-graphqlmaster": "02_Backend_Cloud_DevOps",
-    "vjss-grpcexpert": "02_Backend_Cloud_DevOps",
-    "vjss-iam-policy-expert": "02_Backend_Cloud_DevOps",
-    "vjss-infra-director": "02_Backend_Cloud_DevOps",
-    "vjss-infra-l1-monitoring": "02_Backend_Cloud_DevOps",
-    "vjss-infra-l2-automation": "02_Backend_Cloud_DevOps",
-    "vjss-infra-l3-escalation": "02_Backend_Cloud_DevOps",
-    "vjss-k8-sadmin": "02_Backend_Cloud_DevOps",
-    "vjss-microserviceswiz": "02_Backend_Cloud_DevOps",
-    "vjss-nginxmaster": "02_Backend_Cloud_DevOps",
-    "vjss-nodearchitect": "02_Backend_Cloud_DevOps",
-    "vjss-postgrespro": "02_Backend_Cloud_DevOps",
-    "vjss-pythonfastapi": "02_Backend_Cloud_DevOps",
-    "vjss-redisspecialist": "02_Backend_Cloud_DevOps",
-    "vjss-rustbackend": "02_Backend_Cloud_DevOps",
-    "vjss-serverlesswiz": "02_Backend_Cloud_DevOps",
-    "vjss-superdevops": "02_Backend_Cloud_DevOps",
-    "vjss-terraformexpert": "02_Backend_Cloud_DevOps",
-
-    "vjss-a11y-auditor": "03_Frontend_Mobile_UI",
-    "vjss-androidkotlin": "03_Frontend_Mobile_UI",
-    "vjss-angulararchitect": "03_Frontend_Mobile_UI",
-    "vjss-animationspecialist": "03_Frontend_Mobile_UI",
-    "vjss-cssgridpro": "03_Frontend_Mobile_UI",
-    "vjss-d3visualizer": "03_Frontend_Mobile_UI",
-    "vjss-expoexpert": "03_Frontend_Mobile_UI",
-    "vjss-feature-dev-l2": "03_Frontend_Mobile_UI",
-    "vjss-flutterdev": "03_Frontend_Mobile_UI",
-    "vjss-frontenddesign": "03_Frontend_Mobile_UI",
-    "vjss-ionicpro": "03_Frontend_Mobile_UI",
-    "vjss-ios-swift-ui": "03_Frontend_Mobile_UI",
-    "vjss-nextjspro": "03_Frontend_Mobile_UI",
-    "vjss-pwa-builder": "03_Frontend_Mobile_UI",
-    "vjss-reactexpert": "03_Frontend_Mobile_UI",
-    "vjss-reactnativeexpert": "03_Frontend_Mobile_UI",
-    "vjss-superfrontend": "03_Frontend_Mobile_UI",
-    "vjss-tailwindmaster": "03_Frontend_Mobile_UI",
-    "vjss-uiperfectionist": "03_Frontend_Mobile_UI",
-    "vjss-unitymobile": "03_Frontend_Mobile_UI",
-    "vjss-vuespecialist": "03_Frontend_Mobile_UI",
-    "vjss-wealth-ui-engineer": "03_Frontend_Mobile_UI",
-    "vjss-webgl-wizard": "03_Frontend_Mobile_UI",
-
-    "vjss-apitester": "04_Security_Quality_Testing",
-    "vjss-browserstack-pro": "04_Security_Quality_Testing",
-    "vjss-browsertester": "04_Security_Quality_Testing",
-    "vjss-chaosmonkey": "04_Security_Quality_Testing",
-    "vjss-ciso-governance": "04_Security_Quality_Testing",
-    "vjss-compliancechecker": "04_Security_Quality_Testing",
-    "vjss-coverageoptimizer": "04_Security_Quality_Testing",
-    "vjss-e2-ecypress": "04_Security_Quality_Testing",
-    "vjss-encryptionexpert": "04_Security_Quality_Testing",
-    "vjss-firewallwiz": "04_Security_Quality_Testing",
-    "vjss-load-tester-k6": "04_Security_Quality_Testing",
-    "vjss-mobilesecurity": "04_Security_Quality_Testing",
-    "vjss-mutationtesting": "04_Security_Quality_Testing",
-    "vjss-owasp-validator": "04_Security_Quality_Testing",
-    "vjss-pentest-l2-validator": "04_Security_Quality_Testing",
-    "vjss-pentestbot": "04_Security_Quality_Testing",
-    "vjss-perfanalyzer": "04_Security_Quality_Testing",
-    "vjss-piiscanner": "04_Security_Quality_Testing",
-    "vjss-privacy-airgap-shield": "04_Security_Quality_Testing",
-    "vjss-qa-test-l1": "04_Security_Quality_Testing",
-    "vjss-risk-auditor": "04_Security_Quality_Testing",
-    "vjss-secops-l3-hunter": "04_Security_Quality_Testing",
-    "vjss-securityguidance": "04_Security_Quality_Testing",
-    "vjss-soc-l1-analyst": "04_Security_Quality_Testing",
-    "vjss-supersecurity": "04_Security_Quality_Testing",
-    "vjss-threatmodeler": "04_Security_Quality_Testing",
-    "vjss-unittestjest": "04_Security_Quality_Testing",
-    "vjss-visualregression": "04_Security_Quality_Testing",
-    "vjss-zero-trust-sme": "04_Security_Quality_Testing",
-
-    "vjss-algobacktester": "05_Trading_Fintech_Strategy",
-    "vjss-cryptoauditor": "05_Trading_Fintech_Strategy",
-    "vjss-cryptotracker": "05_Trading_Fintech_Strategy",
-    "vjss-demathistorian": "05_Trading_Fintech_Strategy",
-    "vjss-dividendtracker": "05_Trading_Fintech_Strategy",
-    "vjss-forexexpert": "05_Trading_Fintech_Strategy",
-    "vjss-insidertradingmonitor": "05_Trading_Fintech_Strategy",
-    "vjss-optionschainanalyzer": "05_Trading_Fintech_Strategy",
-    "vjss-portfoliooptimizer": "05_Trading_Fintech_Strategy",
-    "vjss-quant-architect": "05_Trading_Fintech_Strategy",
-    "vjss-quant-science-sme": "05_Trading_Fintech_Strategy",
-    "vjss-riskmanagementbot": "05_Trading_Fintech_Strategy",
-    "vjss-taxoptimizer": "05_Trading_Fintech_Strategy",
-
-    "vjss-asttransformer": "06_Universal_Orchestration_Operations",
-    "vjss-authsystembuilder": "06_Universal_Orchestration_Operations",
-    "vjss-calendaroptimizer": "06_Universal_Orchestration_Operations",
-    "vjss-clean-architecture-sme": "06_Universal_Orchestration_Operations",
-    "vjss-codereview": "06_Universal_Orchestration_Operations",
-    "vjss-deeplinkingwiz": "06_Universal_Orchestration_Operations",
-    "vjss-dependencymanager": "06_Universal_Orchestration_Operations",
-    "vjss-distributed-platform-commander": "06_Universal_Orchestration_Operations",
-    "vjss-docs-generator": "06_Universal_Orchestration_Operations",
-    "vjss-emailtriage": "06_Universal_Orchestration_Operations",
-    "vjss-engineering-vp": "06_Universal_Orchestration_Operations",
-    "vjss-featuredev": "06_Universal_Orchestration_Operations",
-    "vjss-gitmaster": "06_Universal_Orchestration_Operations",
-    "vjss-gitworkflow": "06_Universal_Orchestration_Operations",
-    "vjss-google-workspace-pro": "06_Universal_Orchestration_Operations",
-    "vjss-itsm-l1-servicedesk": "06_Universal_Orchestration_Operations",
-    "vjss-itsm-l3-commander": "06_Universal_Orchestration_Operations",
-    "vjss-jiramanager": "06_Universal_Orchestration_Operations",
-    "vjss-jsontransformer": "06_Universal_Orchestration_Operations",
-    "vjss-kaizen-sme": "06_Universal_Orchestration_Operations",
-    "vjss-knowledgebasewiz": "06_Universal_Orchestration_Operations",
-    "vjss-loganalyzer": "06_Universal_Orchestration_Operations",
-    "vjss-meetingsummarizer": "06_Universal_Orchestration_Operations",
-    "vjss-notionarchitect": "06_Universal_Orchestration_Operations",
-    "vjss-poka-yoke-sre": "06_Universal_Orchestration_Operations",
-    "vjss-regexmaster": "06_Universal_Orchestration_Operations",
-    "vjss-service-delivery-vp": "06_Universal_Orchestration_Operations",
-    "vjss-shellexpert": "06_Universal_Orchestration_Operations",
-    "vjss-slackbotbuilder": "06_Universal_Orchestration_Operations",
-    "vjss-smartcontext": "06_Universal_Orchestration_Operations",
-    "vjss-strategic-overseer": "06_Universal_Orchestration_Operations",
-    "vjss-super-vjbrain": "06_Universal_Orchestration_Operations",
-    "vjss-superadmin": "06_Universal_Orchestration_Operations",
-    "vjss-superarchitect": "06_Universal_Orchestration_Operations",
-    "vjss-superbuilder": "06_Universal_Orchestration_Operations",
-    "vjss-superdebugger": "06_Universal_Orchestration_Operations",
-    "vjss-superdocs": "06_Universal_Orchestration_Operations",
-    "vjss-superhealing": "06_Universal_Orchestration_Operations",
-    "vjss-superparallel": "06_Universal_Orchestration_Operations",
-    "vjss-superpower": "06_Universal_Orchestration_Operations",
-    "vjss-superpowersplugin": "06_Universal_Orchestration_Operations",
-    "vjss-superreviewer": "06_Universal_Orchestration_Operations",
-    "vjss-taskautomator": "06_Universal_Orchestration_Operations",
-    "vjss-universal-copilot": "06_Universal_Orchestration_Operations",
-    "vjss-universal-project-adapter": "06_Universal_Orchestration_Operations",
-
-    "vjss-academic-humanizer": "07_Scientific_Research_PhD_Academic",
-    "vjss-bioinformatics-expert": "07_Scientific_Research_PhD_Academic",
-    "vjss-phd-scholar": "07_Scientific_Research_PhD_Academic",
-    "vjss-scientific-paper-writer": "07_Scientific_Research_PhD_Academic"
-}
-
-DOMAIN_DICT = {
-    # 01 AI ML DataScience
-    "vjss-ai-integrator": "Head of AI & LLM Engineering, RAG loops & AI Gateway Proxying",
-    "vjss-ai-research-director": "Head of Quantitative Research, AI Strategy & Model Governance",
-    "vjss-datacleaner": "Data Sanitization, Imputation & Outlier Detection",
-    "vjss-data-pipeline-l1": "L1 High-Speed Market Tick Ingestion & Timeseries Integrity",
-    "vjss-geminiapidev": "Google Gemini API, Multimodal Prompts & Structured Outputs",
-    "vjss-math-optimizer-l3": "L3 Mathematical Optimization, Operations Research & Monte Carlo",
-    "vjss-ml-engineer-l2": "L2 Machine Learning Engineering, RAG Tuning & Local GGUF Quantization",
-    "vjss-nlp-specialist": "NLP, Semantic Search, Sentiment Analysis & Tokenization",
-    "vjss-ollamalocalexpert": "Local Ollama Deployment, Modelfiles & Local LLM Tuning",
-    "vjss-pandasdatawizard": "Pandas Data Wrangling, Vectorized Computations & Memory Optimization",
-    "vjss-promptengineer": "Prompt Engineering, Few-Shot Prompts & Hallucination Prevention",
-    "vjss-pytorchdev": "PyTorch Neural Networks, Custom Training Loops & Tensors",
-    "vjss-ragarchitect": "RAG Architecture, Chunking, Hybrid Retrieval & Vector DBs",
-    "vjss-scikitlearnexpert": "Scikit-Learn Machine Learning, Classification & Model Validation",
-    "vjss-superdata": "Data Analysis, Schema Normalization & Business Intelligence",
-    "vjss-superintelligent": "Self-Healing Agent Protocol & 1000-Line Compliance Validator",
-    "vjss-tensorflowpro": "TensorFlow/Keras Deep Learning & Production Serving",
-    "vjss-vector-db-admin": "Vector Database Administration (pgvector, Qdrant, Chroma, Milvus)",
-
-    # 02 Backend Cloud DevOps
-    "vjss-ansibleexpert": "Ansible Infrastructure Automation & Playbook Provisioning",
-    "vjss-awsarchitect": "AWS Always-Free Tier Architecture & Cloud Infrastructure",
-    "vjss-azurearchitect": "Azure Cloud Services, App Services & Cosmos DB",
-    "vjss-ci-cd-pipeline-builder": "CI/CD Automation, GitHub Actions & Quality Gates",
-    "vjss-compression-wiz": "Data Compression (zstd, Brotli, gzip) & Storage Optimization",
-    "vjss-datacenter-sme": "Principal Enterprise Datacenter Architecture, VMware ESXi & SAN Storage",
-    "vjss-djangoexpert": "Django Full-Stack Architecture, ORM & Django REST Framework",
-    "vjss-dockermaster": "Docker Multi-Stage Containerization & Image Minimization",
-    "vjss-fintech-devops": "Fintech Infrastructure, PM2 Daemons & High-Availability DBRE",
-    "vjss-fullstack-l3-lead": "L3 Full-Stack Systems Lead, Complex Microservices & Low-Latency APIs",
-    "vjss-gcp-pro": "GCP Always-Free Tier Architecture, Compute Engine & BigQuery",
-    "vjss-graphqlmaster": "GraphQL Schema Design, Apollo Server & DataLoader Batching",
-    "vjss-grpcexpert": "gRPC High-Throughput Binary RPC & Protocol Buffers",
-    "vjss-iam-policy-expert": "Least-Privilege IAM Policies, Cloud RBAC & Security Hardening",
-    "vjss-infra-director": "Enterprise Multi-Cloud Infrastructure Governance & Zero-Bill Architecture",
-    "vjss-infra-l1-monitoring": "L1 24x7 Datacenter Operations & Telemetry Alert Triage",
-    "vjss-infra-l2-automation": "L2 Infrastructure Automation, Automated Patching & Backup Snapshots",
-    "vjss-infra-l3-escalation": "L3 Senior Infrastructure Escalation & Crash War-Rooms",
-    "vjss-k8-sadmin": "Kubernetes Cluster Administration, Helm & Zero-Downtime Deploys",
-    "vjss-microserviceswiz": "Event-Driven Microservice Architecture & Distributed Messaging",
-    "vjss-nginxmaster": "Nginx Reverse Proxy, Rate Limiting, SSL/TLS & Load Balancing",
-    "vjss-nodearchitect": "Node.js & TypeScript Async Microservices & Fastify/Express",
-    "vjss-postgrespro": "PostgreSQL Performance Tuning, Indexing & Query Optimization",
-    "vjss-pythonfastapi": "High-Performance Async FastAPI Architecture & Pydantic Validation",
-    "vjss-redisspecialist": "Redis Caching, Pub/Sub, Streams & Low-Latency State Stores",
-    "vjss-rustbackend": "Rust Actix/Axum Backend Development & Memory Safety",
-    "vjss-serverlesswiz": "Serverless Functions, AWS Lambda & Cloudflare Workers",
-    "vjss-superdevops": "Universal DevOps, Git Branching & CI/CD Deployment",
-    "vjss-terraformexpert": "Terraform Infrastructure as Code (IaC) & Cloud Modules",
-
-    # 03 Frontend Mobile UI
-    "vjss-a11y-auditor": "WCAG 2.1 Accessibility Auditing & ARIA Compliance",
-    "vjss-androidkotlin": "Android Kotlin Development & Jetpack Compose UI",
-    "vjss-angulararchitect": "Angular Enterprise Architecture & RxJS/Signals State",
-    "vjss-animationspecialist": "Framer Motion, GSAP & Hardware-Accelerated UI Animations",
-    "vjss-cssgridpro": "CSS Grid, Flexbox & Responsive Layout Engineering",
-    "vjss-d3visualizer": "D3.js Interactive Data Visualization & Financial Charting",
-    "vjss-expoexpert": "React Native Expo EAS Builds & Mobile Deployment",
-    "vjss-feature-dev-l2": "L2 High-Speed Feature Engineering (React, FastAPI, Node.js)",
-    "vjss-flutterdev": "Flutter & Dart Cross-Platform Mobile Applications",
-    "vjss-frontenddesign": "Production-Grade UI Design with Bold Aesthetic Polish",
-    "vjss-ionicpro": "Ionic Framework & Capacitor Hybrid Mobile Apps",
-    "vjss-ios-swift-ui": "Native iOS Development with Swift and SwiftUI",
-    "vjss-nextjspro": "Next.js App Router, SSR, Server Components & SEO Optimization",
-    "vjss-pwa-builder": "Progressive Web Apps (PWA), Service Workers & Offline Caching",
-    "vjss-reactexpert": "React 19, Custom Hooks, State Architecture & Clean UI Components",
-    "vjss-reactnativeexpert": "React Native Native Modules & Mobile Performance Optimization",
-    "vjss-superfrontend": "Modern Web UI Components, Dashboards & Dark Mode Design",
-    "vjss-tailwindmaster": "Tailwind CSS Utility-First Design & Theme Configuration",
-    "vjss-uiperfectionist": "UI/UX Visual Auditing, Cross-Device QA & Interaction Polish",
-    "vjss-unitymobile": "Unity 3D/2D Mobile Game Optimization & C# Scripts",
-    "vjss-vuespecialist": "Vue 3 Composition API, Pinia State & Nuxt.js",
-    "vjss-wealth-ui-engineer": "Wealth Management Executive Dashboards & Client Portals",
-    "vjss-webgl-wizard": "Three.js, WebGL 3D Shaders & Browser Canvas Rendering",
-
-    # 04 Security Quality Testing
-    "vjss-apitester": "REST & GraphQL Automated API Contract Testing",
-    "vjss-browserstack-pro": "Cross-Browser & Multi-Device Cloud QA Testing",
-    "vjss-browsertester": "Headless Browser Automation (Playwright/Puppeteer)",
-    "vjss-chaosmonkey": "Chaos Engineering & System Resiliency Testing",
-    "vjss-ciso-governance": "CISO Information Security Governance, ISO 27001 & SOC2",
-    "vjss-compliancechecker": "Data Privacy & Regulatory Compliance (GDPR/HIPAA)",
-    "vjss-coverageoptimizer": "Code Coverage Auditing & Test Gap Analysis",
-    "vjss-e2-ecypress": "Cypress End-to-End Automated Browser Testing",
-    "vjss-encryptionexpert": "AES-256 Cryptography, TLS 1.3 & Secret Key Management",
-    "vjss-firewallwiz": "Linux Firewalls (UFW/iptables), WAF & Port Hardening",
-    "vjss-load-tester-k6": "k6 Load Testing, Stress Benchmarking & Throughput Analysis",
-    "vjss-mobilesecurity": "Mobile App Security Hardening & APK Decompilation Defense",
-    "vjss-mutationtesting": "Mutation Testing & Test Suite Quality Verification",
-    "vjss-owasp-validator": "OWASP Top 10 Vulnerability Hardening & Code Auditing",
-    "vjss-pentest-l2-validator": "L2 Automated Penetration Testing & Container CVE Patching",
-    "vjss-pentestbot": "Automated Penetration Testing & Vulnerability Scanning",
-    "vjss-perfanalyzer": "Performance Profiling, Memory Leak Debugging & CPU Flamegraphs",
-    "vjss-piiscanner": "PII & SPI Secret Scanner & Data Leakage Prevention",
-    "vjss-privacy-airgap-shield": "Zero-Data-Leakage Prompt Guard & Path Sanitization",
-    "vjss-qa-test-l1": "L1 Automated QA Testing, Pytest & Contract Validation",
-    "vjss-risk-auditor": "Quality Assurance & Capital Protection Risk Management",
-    "vjss-secops-l3-hunter": "L3 Threat Hunting, DDoS Defense & Real-Time SIEM Log Audits",
-    "vjss-securityguidance": "Proactive Security Guidance & Secure Coding Practices",
-    "vjss-soc-l1-analyst": "L1 SOC Security Alert Triage & Real-Time Log Inspection",
-    "vjss-supersecurity": "Global Security Architecture, Threat Modeling & Hardening",
-    "vjss-threatmodeler": "STRIDE Threat Modeling & Attack Surface Mapping",
-    "vjss-unittestjest": "Jest / Vitest Unit Testing & Component Mocking",
-    "vjss-visualregression": "Pixel-by-Pixel UI Visual Regression Testing",
-    "vjss-zero-trust-sme": "Principal Zero-Trust Architecture & Identity Federation",
-
-    # 05 Trading Fintech Strategy
-    "vjss-algobacktester": "Algorithmic Backtesting, Tick Replay & Slippage Modeling",
-    "vjss-cryptoauditor": "Crypto Smart Contract Auditing & DeFi Security",
-    "vjss-cryptotracker": "Crypto Exchange WebSockets, Order Books & Liquidation Alerts",
-    "vjss-demathistorian": "Historical Tick Data Warehousing & Parquet/DuckDB Archival",
-    "vjss-dividendtracker": "Dividend Yield Portfolio Tracking & Corporate Actions",
-    "vjss-forexexpert": "Forex Currency Trading, Macroeconomic Models & Volatility",
-    "vjss-insidertradingmonitor": "Insider Trading Filings, Bulk Deals & Institutional Flows",
-    "vjss-optionschainanalyzer": "Options Chain Greeks (Delta, Gamma, Theta), PCR & Max Pain",
-    "vjss-portfoliooptimizer": "Portfolio Optimization, Modern Portfolio Theory & Sharpe Ratio",
-    "vjss-quant-architect": "Head of Quantitative Strategy, Alpha Labs & Algorithmic Engines",
-    "vjss-quant-science-sme": "Principal Quant SME, Dynamic Rally Riding & Dynamic ATR State Machine",
-    "vjss-riskmanagementbot": "Capital Protection, Max Drawdown Circuits & Position Sizing",
-    "vjss-taxoptimizer": "Trading Capital Gains Tax Optimization & STCG/LTCG Calculations",
-
-    # 06 Universal Orchestration Operations
-    "vjss-asttransformer": "Abstract Syntax Tree (AST) Code Analysis & Automated Refactoring",
-    "vjss-authsystembuilder": "Authentication & Authorization Architecture (JWT, OAuth2, RBAC)",
-    "vjss-calendaroptimizer": "Time Management, Developer Productivity & Calendar Automation",
-    "vjss-clean-architecture-sme": "Principal Software Architect, Hexagonal Architecture & DDD",
-    "vjss-codereview": "High-Signal Automated Code Review & Architectural Auditing",
-    "vjss-deeplinkingwiz": "Deep Linking & App Schema Routing Architecture",
-    "vjss-dependencymanager": "Package Management, Vulnerability Pruning & Version Locking",
-    "vjss-distributed-platform-commander": "Distributed Platform Orchestrator & Multi-Node State Synchronization",
-    "vjss-docs-generator": "Automated Technical Documentation & API Reference Generator",
-    "vjss-emailtriage": "Email Triage, Communication Drafting & Quoted Mail Trails",
-    "vjss-engineering-vp": "VP of Enterprise Software Engineering & 5S Workspace Order",
-    "vjss-featuredev": "7-Phase Guided Feature Development Workflow",
-    "vjss-gitmaster": "Advanced Git Operations, Rebase, Branching & Merge Conflict Resolution",
-    "vjss-gitworkflow": "Conventional Commits, Pull Request Automation & GitHub Workflows",
-    "vjss-google-workspace-pro": "Google Workspace APIs, Sheets & Apps Script Automation",
-    "vjss-itsm-l1-servicedesk": "L1 IT Service Desk Ticket Categorization & SOP Dispatching",
-    "vjss-itsm-l3-commander": "L3 Major Incident Command (P1/P2) & 15-Minute MTTR War-Rooms",
-    "vjss-jiramanager": "Jira & GitHub Projects Agile Workflow & Sprint Management",
-    "vjss-jsontransformer": "High-Speed JSON Transformation, jq Queries & Schema Mapping",
-    "vjss-kaizen-sme": "Japanese Kaizen Continuous Improvement & 5-Whys Root Cause Analysis",
-    "vjss-knowledgebasewiz": "Knowledge Base Design, Developer Runbooks & Documentation Wikis",
-    "vjss-loganalyzer": "Real-Time Log Parsing, Stack Trace Extraction & Error Clustering",
-    "vjss-meetingsummarizer": "Meeting Summarization, Action Item Extraction & Minutes of Meeting",
-    "vjss-notionarchitect": "Notion Workspace Database Architecture & Templates",
-    "vjss-poka-yoke-sre": "Japanese Poka-Yoke Mistake-Proofing & Automated Rollback Circuits",
-    "vjss-regexmaster": "Regular Expression Engineering, Regex Optimization & Text Parsing",
-    "vjss-service-delivery-vp": "Enterprise Service Delivery Management & ITIL v4 Master Lifecycle",
-    "vjss-shellexpert": "Advanced Bash/Zsh Shell Scripting & Linux System Administration",
-    "vjss-slackbotbuilder": "Slack & Discord Bot Integrations, Webhooks & Interactive Modals",
-    "vjss-smartcontext": "Persistent Project Context Caching, Redis SmartContext & Fast Resume",
-    "vjss-strategic-overseer": "Strategic Operations & Universal Ecosystem Mandate Enforcement",
-    "vjss-super-vjbrain": "Master VJ Brain Orchestrator & Delayed Startup Heartbeat",
-    "vjss-superadmin": "Universal Linux System Administration, Process Management & Cron",
-    "vjss-superarchitect": "System Architecture Design, Codebase Mapping & Tech Debt Auditing",
-    "vjss-superbuilder": "Full-Stack Software Feature Development & Quality Implementation",
-    "vjss-superdebugger": "Deep Root Cause Analysis, Bug Diagnosis & Issue Resolution",
-    "vjss-superdocs": "Technical Writing, Architecture Documentation & API Guides",
-    "vjss-superhealing": "Autonomous Self-Healing Bug Resolution & Auto-Fixing Engine",
-    "vjss-superparallel": "Multi-Threaded Concurrent Execution for Batch Operations",
-    "vjss-superpower": "Master Execution Enhancer for Autonomous AI Agents",
-    "vjss-superpowersplugin": "Explore -> Plan -> Code Structured Engineering Workflow",
-    "vjss-superreviewer": "Automated Security, Correctness & Architectural Code Review",
-    "vjss-taskautomator": "Developer Task Automation & Repetitive Workflow Scripting",
-    "vjss-universal-copilot": "Master Personal AI Assistant Gateway & 161-Skill Orchestrator",
-    "vjss-universal-project-adapter": "Universal Context Sensing & Client Coding Standard Matching",
-
-    # 07 Scientific Research PhD Academic
-    "vjss-academic-humanizer": "Academic AI Humanizer, Burstiness Tuning & 0% AI Detection Phrasing",
-    "vjss-bioinformatics-expert": "Computational Biology, Genomics, Proteomics & Biopython Pipelines",
-    "vjss-phd-scholar": "PhD Doctoral Research, 6-Chapter Dissertation Scaffolding & PRISMA Reviews",
-    "vjss-scientific-paper-writer": "Scientific Paper Writing, IMRaD Journal Drafting & LaTeX Formatting"
-}
-
-def to_slug(name):
-    clean = re.sub(r'^(VJSS_)?', '', name)
-    clean = re.sub(r'([a-z0-9])([A-Z])', r'\1-\2', clean)
-    clean = clean.replace('_', '-').lower()
-    return f"vjss-{clean}" if not clean.startswith("vjss-") else clean
-
-def to_camel(slug):
-    clean = slug.replace("vjss-", "")
-    parts = clean.split("-")
-    return "VJSS_" + "".join(p.capitalize() for p in parts)
-
-def extract_metadata(content, slug):
-    domain = DOMAIN_DICT.get(slug, slug.replace("vjss-", "").replace("-", " ").title())
-    category = SKILL_TO_CAT.get(slug, "06_Universal_Orchestration_Operations")
-    
-    meta = {
-        "protocol": to_camel(slug),
-        "domain": domain,
-        "category": category,
-        "description": f"Use this skill for {domain}.",
-        "version": "2.4.0",
-        "creator": "Mr. Vishalkumar Joshi",
-        "website": "https://vjprojects.co.in",
-        "repo": "https://github.com/mrvishaljjoshi-cmyk/VJSS"
-    }
-    return meta
-
-def generate_compact_skill_md(meta, raw_content, slug):
-    protocol_name = meta["protocol"]
-    clean_title = re.sub(r'^VJSS_', '', protocol_name)
-    cat_id = SKILL_TO_CAT.get(slug, meta.get("category", "06_Universal_Orchestration_Operations"))
+def generate_compact_skill_md(slug, domain, cat_id):
+    camel_name = to_camel(slug)
+    clean_title = re.sub(r'^VJSS_', '', camel_name)
     category_desc = CATEGORY_MAP.get(cat_id, cat_id)
-    domain_text = meta.get("domain", clean_title)
     
-    desc = f"Use this skill for {domain_text} ({category_desc})."
+    desc = f"Use this skill for {domain} ({category_desc})."
     yaml_desc = desc.replace('"', "'").replace('\n', ' ').strip()
     
     skill_md = f"""---
@@ -408,9 +36,9 @@ description: >-
 ---
 
 # 🌟 VJSS Protocol: {clean_title}
-**Domain:** `{domain_text}`
+**Domain:** `{domain}`
 **Category:** `{cat_id}` ({category_desc})
-**Creator & Lead Architect:** {meta.get('creator', 'Mr. Vishalkumar Joshi')} • [VJSS Repository]({meta.get('repo', 'https://github.com/mrvishaljjoshi-cmyk/VJSS')}) • [Website]({meta.get('website', 'https://vjprojects.co.in')})
+**Creator & Lead Architect:** Mr. Vishalkumar Joshi • [VJSS Repository](https://github.com/mrvishaljjoshi-cmyk/VJSS) • [Website](https://vjprojects.co.in)
 
 ---
 
@@ -530,164 +158,347 @@ def generate_universal_copilot_md(all_skills_data):
     return "\n".join(lines)
 
 def build_all():
-    print("🚀 Starting VJSS Master 161-Skill Builder & Universal Copilot Indexer...")
-    os.makedirs(GLOBAL_SKILLS_DIR, exist_ok=True)
-    os.makedirs(WORKSPACE_SKILLS_DIR, exist_ok=True)
-    os.makedirs(CATEGORIES_DIR, exist_ok=True)
-    os.makedirs(TXT_SKILLS_DIR, exist_ok=True)
+    print("🚀 Running VJSS Master 161-Skill Synchronizer & Web Catalog Builder...")
     
-    all_slugs = set(SKILL_TO_CAT.keys())
-    if os.path.exists(WORKSPACE_SKILLS_DIR):
-        for d in os.listdir(WORKSPACE_SKILLS_DIR):
-            if os.path.isdir(os.path.join(WORKSPACE_SKILLS_DIR, d)):
-                all_slugs.add(d)
-                
+    # 1. Collect and write compact SKILL.md files
     skill_index = {}
-    skills_processed = 0
+    web_catalog = []
     
-    # First pass: load content and metadata
-    for slug in sorted(all_slugs):
-        ws_skill_dir = os.path.join(WORKSPACE_SKILLS_DIR, slug)
-        md_path = os.path.join(ws_skill_dir, "SKILL.md")
-        manual_path = os.path.join(ws_skill_dir, "references", "manual.md")
-        
-        raw_content = ""
-        if os.path.exists(manual_path):
-            with open(manual_path, "r", encoding="utf-8", errors="ignore") as f:
-                raw_content = f.read()
-        elif os.path.exists(md_path):
-            with open(md_path, "r", encoding="utf-8", errors="ignore") as f:
-                raw_content = f.read()
-                
-        meta = extract_metadata(raw_content, slug)
-        
+    for slug, (domain, cat_id) in DOMAIN_MAP.items():
+        camel_name = to_camel(slug)
         skill_index[slug] = {
             "slug": slug,
             "name": slug,
-            "original_name": meta["protocol"],
-            "domain": meta["domain"],
-            "category": meta["category"],
-            "description": meta["description"],
-            "raw_content": raw_content or f"# {slug}\nUniversal protocol for {meta['domain']}."
+            "original_name": camel_name,
+            "domain": domain,
+            "category": cat_id,
+            "description": f"Use this skill for {domain}."
         }
+        web_catalog.append({
+            "name": camel_name,
+            "slug": slug,
+            "category": cat_id,
+            "description": domain,
+            "raw_url": f"https://raw.githubusercontent.com/mrvishaljjoshi-cmyk/VJSS/main/txt_skills/{camel_name}.txt"
+        })
         
-    # Generate vjss-universal-copilot master content
     master_copilot_content = generate_universal_copilot_md(skill_index)
     
-    # Second pass: Deploy all 161 skills
     for slug, data in skill_index.items():
         cat_id = data["category"]
-        raw_content = data["raw_content"]
-        meta = {
-            "protocol": data["original_name"],
-            "domain": data["domain"],
-            "category": cat_id,
-            "description": data["description"],
-            "creator": "Mr. Vishalkumar Joshi",
-            "website": "https://vjprojects.co.in",
-            "repo": "https://github.com/mrvishaljjoshi-cmyk/VJSS"
-        }
+        domain = data["domain"]
+        compact_md = master_copilot_content if slug == "vjss-universal-copilot" else generate_compact_skill_md(slug, domain, cat_id)
         
-        if slug == "vjss-universal-copilot":
-            compact_skill_md = master_copilot_content
-        else:
-            compact_skill_md = generate_compact_skill_md(meta, raw_content, slug)
-            
-        # 1. Deploy to Workspace .agents/skills/<slug>
+        # 1. Workspace
         ws_dir = os.path.join(WORKSPACE_SKILLS_DIR, slug)
-        os.makedirs(os.path.join(ws_dir, "references"), exist_ok=True)
+        os.makedirs(ws_dir, exist_ok=True)
         with open(os.path.join(ws_dir, "SKILL.md"), "w", encoding="utf-8") as f:
-            f.write(compact_skill_md)
-        with open(os.path.join(ws_dir, "references", "manual.md"), "w", encoding="utf-8") as f:
-            f.write(raw_content if slug != "vjss-universal-copilot" else master_copilot_content)
+            f.write(compact_md)
             
-        # 2. Deploy to Global ~/.gemini/config/skills/<slug>
+        # 2. Global
         glob_dir = os.path.join(GLOBAL_SKILLS_DIR, slug)
-        os.makedirs(os.path.join(glob_dir, "references"), exist_ok=True)
+        os.makedirs(glob_dir, exist_ok=True)
         with open(os.path.join(glob_dir, "SKILL.md"), "w", encoding="utf-8") as f:
-            f.write(compact_skill_md)
-        with open(os.path.join(glob_dir, "references", "manual.md"), "w", encoding="utf-8") as f:
-            f.write(raw_content if slug != "vjss-universal-copilot" else master_copilot_content)
+            f.write(compact_md)
             
-        # 3. Deploy to VJSS/categories/<cat_id>/<slug>
+        # 3. Categories
         cat_dir = os.path.join(CATEGORIES_DIR, cat_id, slug)
-        os.makedirs(os.path.join(cat_dir, "references"), exist_ok=True)
+        os.makedirs(cat_dir, exist_ok=True)
         with open(os.path.join(cat_dir, "SKILL.md"), "w", encoding="utf-8") as f:
-            f.write(compact_skill_md)
-        with open(os.path.join(cat_dir, "references", "manual.md"), "w", encoding="utf-8") as f:
-            f.write(raw_content)
+            f.write(compact_md)
             
-        # 4. Save plain-text in VJSS/txt_skills/<original_name>.txt
-        txt_name = data["original_name"] + ".txt"
-        with open(os.path.join(TXT_SKILLS_DIR, txt_name), "w", encoding="utf-8") as f:
-            f.write(raw_content)
-            
-        skills_processed += 1
-        
-    # Clean exportable index
-    clean_index = {
-        s: {
-            "name": d["slug"],
-            "slug": d["slug"],
-            "original_name": d["original_name"],
-            "domain": d["domain"],
-            "category": d["category"],
-            "description": d["description"]
-        }
-        for s, d in skill_index.items()
-    }
-    
-    # Save skills.json
+    # 2. Save skills.json files
     ws_skills_json = os.path.join(os.getcwd(), ".agents", "skills.json")
     with open(ws_skills_json, "w", encoding="utf-8") as f:
-        json.dump(clean_index, f, indent=2)
+        json.dump(skill_index, f, indent=2)
         
     with open(os.path.join(GLOBAL_SKILLS_DIR, "skills.json"), "w", encoding="utf-8") as f:
-        json.dump(clean_index, f, indent=2)
+        json.dump(skill_index, f, indent=2)
+        
+    # 3. Save Web Catalog
+    os.makedirs(os.path.dirname(WEB_SKILLS_JSON), exist_ok=True)
+    with open(WEB_SKILLS_JSON, "w", encoding="utf-8") as f:
+        json.dump(web_catalog, f, indent=2)
+    print(f"✓ Updated web catalog with all {len(web_catalog)} skills: {WEB_SKILLS_JSON}")
 
-    # Sync Redis Index
+    # 4. Expanded Multi-Tag Keyword Dictionary (1,500+ Tokens)
     try:
         import redis
         r = redis.Redis(host='127.0.0.1', port=6379, db=0)
-        r.set('vjp:skills:registry', json.dumps(clean_index))
+        r.set('vjp:skills:registry', json.dumps(skill_index))
         
-        alias_map = {
+        keyword_map = {
+            # AI & Data
             'fastapi': ['vjss-pythonfastapi', 'vjss-feature-dev-l2'],
+            'uvicorn': ['vjss-pythonfastapi'],
+            'pydantic': ['vjss-pythonfastapi'],
             'python': ['vjss-pythonfastapi', 'vjss-pandasdatawizard', 'vjss-pytorchdev', 'vjss-scikitlearnexpert'],
+            'pandas': ['vjss-pandasdatawizard', 'vjss-datacleaner', 'vjss-superdata'],
+            'dataframe': ['vjss-pandasdatawizard', 'vjss-datacleaner'],
+            'pytorch': ['vjss-pytorchdev', 'vjss-scikitlearnexpert'],
+            'tensorflow': ['vjss-tensorflowpro', 'vjss-pytorchdev'],
+            'keras': ['vjss-tensorflowpro'],
+            'sklearn': ['vjss-scikitlearnexpert'],
+            'scikit': ['vjss-scikitlearnexpert'],
+            'scikitlearn': ['vjss-scikitlearnexpert'],
+            'rag': ['vjss-ragarchitect', 'vjss-ai-integrator', 'vjss-vector-db-admin', 'vjss-ml-engineer-l2'],
+            'chunking': ['vjss-ragarchitect'],
+            'vector': ['vjss-vector-db-admin', 'vjss-ragarchitect'],
+            'pgvector': ['vjss-vector-db-admin', 'vjss-postgrespro'],
+            'qdrant': ['vjss-vector-db-admin'],
+            'chroma': ['vjss-vector-db-admin', 'vjss-ragarchitect'],
+            'chromadb': ['vjss-vector-db-admin'],
+            'milvus': ['vjss-vector-db-admin'],
+            'pinecone': ['vjss-vector-db-admin'],
+            'gemini': ['vjss-geminiapidev', 'vjss-promptengineer'],
+            'multimodal': ['vjss-geminiapidev'],
+            'ollama': ['vjss-ollamalocalexpert', 'vjss-ml-engineer-l2'],
+            'gguf': ['vjss-ml-engineer-l2', 'vjss-ollamalocalexpert'],
+            'nlp': ['vjss-nlp-specialist', 'vjss-academic-humanizer'],
+            'tokenization': ['vjss-nlp-specialist'],
+            'sentiment': ['vjss-nlp-specialist'],
+            'montecarlo': ['vjss-math-optimizer-l3', 'vjss-algobacktester'],
+            'pulp': ['vjss-math-optimizer-l3'],
+            'linearprogramming': ['vjss-math-optimizer-l3'],
+            'optimizer': ['vjss-math-optimizer-l3', 'vjss-portfoliooptimizer'],
+
+            # Backend & Cloud
             'docker': ['vjss-dockermaster', 'vjss-ci-cd-pipeline-builder', 'vjss-pentest-l2-validator'],
+            'dockerfile': ['vjss-dockermaster'],
+            'compose': ['vjss-dockermaster'],
             'k8s': ['vjss-k8-sadmin'],
             'kubernetes': ['vjss-k8-sadmin'],
-            'datacenter': ['vjss-datacenter-sme', 'vjss-infra-director', 'vjss-infra-l1-monitoring'],
+            'helm': ['vjss-k8-sadmin'],
+            'datacenter': ['vjss-datacenter-sme', 'vjss-infra-director', 'vjss-infra-l1-monitoring', 'vjss-infra-l3-escalation'],
             'vmware': ['vjss-datacenter-sme'],
-            'react': ['vjss-reactexpert', 'vjss-reactnativeexpert', 'vjss-nextjspro', 'vjss-feature-dev-l2'],
-            'nextjs': ['vjss-nextjspro'],
-            'vue': ['vjss-vuespecialist'],
-            'flutter': ['vjss-flutterdev'],
-            'postgres': ['vjss-postgrespro'],
-            'postgresql': ['vjss-postgrespro'],
-            'redis': ['vjss-redisspecialist', 'vjss-smartcontext'],
+            'esxi': ['vjss-datacenter-sme'],
+            'vcenter': ['vjss-datacenter-sme'],
+            'san': ['vjss-datacenter-sme', 'vjss-infra-l3-escalation'],
+            'ilo': ['vjss-infra-l3-escalation'],
+            'outage': ['vjss-infra-l3-escalation', 'vjss-itsm-l3-commander'],
+            'incident': ['vjss-itsm-l3-commander', 'vjss-itsm-l1-servicedesk'],
+            'warroom': ['vjss-itsm-l3-commander', 'vjss-infra-l3-escalation'],
+            'itsm': ['vjss-itsm-l1-servicedesk', 'vjss-itsm-l3-commander', 'vjss-service-delivery-vp'],
+            'itil': ['vjss-service-delivery-vp', 'vjss-itsm-l1-servicedesk'],
+            'sla': ['vjss-service-delivery-vp', 'vjss-infra-director'],
+            'ola': ['vjss-service-delivery-vp'],
+            'kaizen': ['vjss-kaizen-sme', 'vjss-poka-yoke-sre'],
+            '5whys': ['vjss-kaizen-sme', 'vjss-superdebugger'],
+            'muda': ['vjss-kaizen-sme'],
+            'pokayoke': ['vjss-poka-yoke-sre'],
+            'mistakeproofing': ['vjss-poka-yoke-sre'],
+            'rollback': ['vjss-poka-yoke-sre', 'vjss-ci-cd-pipeline-builder'],
+            'ansible': ['vjss-ansibleexpert', 'vjss-infra-l2-automation'],
+            'playbook': ['vjss-ansibleexpert'],
+            'terraform': ['vjss-terraformexpert', 'vjss-awsarchitect'],
+            'iac': ['vjss-terraformexpert', 'vjss-ansibleexpert'],
+            'aws': ['vjss-awsarchitect', 'vjss-iam-policy-expert'],
+            'lambda': ['vjss-serverlesswiz', 'vjss-awsarchitect'],
+            's3': ['vjss-awsarchitect'],
+            'dynamodb': ['vjss-awsarchitect'],
+            'azure': ['vjss-azurearchitect', 'vjss-datacenter-sme'],
+            'cosmos': ['vjss-azurearchitect'],
+            'gcp': ['vjss-gcp-pro'],
+            'bigquery': ['vjss-gcp-pro'],
+            'nginx': ['vjss-nginxmaster', 'vjss-soc-l1-analyst'],
+            'reverseproxy': ['vjss-nginxmaster'],
+            'node': ['vjss-nodearchitect', 'vjss-fullstack-l3-lead'],
+            'nodejs': ['vjss-nodearchitect', 'vjss-fullstack-l3-lead'],
+            'express': ['vjss-nodearchitect'],
+            'fastify': ['vjss-nodearchitect'],
+            'typescript': ['vjss-nodearchitect', 'vjss-reactexpert', 'vjss-nextjspro'],
             'rust': ['vjss-rustbackend'],
+            'actix': ['vjss-rustbackend'],
+            'axum': ['vjss-rustbackend'],
+            'postgres': ['vjss-postgrespro', 'vjss-fintech-devops'],
+            'postgresql': ['vjss-postgrespro'],
+            'sql': ['vjss-postgrespro', 'vjss-superdata'],
+            'redis': ['vjss-redisspecialist', 'vjss-smartcontext', 'vjss-fintech-devops'],
+            'pubsub': ['vjss-redisspecialist', 'vjss-microserviceswiz'],
+            'grpc': ['vjss-grpcexpert', 'vjss-microserviceswiz'],
+            'protobuf': ['vjss-grpcexpert'],
+            'graphql': ['vjss-graphqlmaster'],
+            'apollo': ['vjss-graphqlmaster'],
+            'dataloader': ['vjss-graphqlmaster'],
+            'django': ['vjss-djangoexpert'],
+            'drf': ['vjss-djangoexpert'],
+            'compression': ['vjss-compression-wiz'],
+            'zstd': ['vjss-compression-wiz'],
+            'brotli': ['vjss-compression-wiz'],
+            'gzip': ['vjss-compression-wiz'],
+
+            # Frontend & UI
+            'react': ['vjss-reactexpert', 'vjss-reactnativeexpert', 'vjss-nextjspro', 'vjss-feature-dev-l2'],
+            'nextjs': ['vjss-nextjspro', 'vjss-reactexpert'],
+            'vue': ['vjss-vuespecialist'],
+            'pinia': ['vjss-vuespecialist'],
+            'nuxt': ['vjss-vuespecialist'],
+            'flutter': ['vjss-flutterdev'],
+            'dart': ['vjss-flutterdev'],
+            'tailwind': ['vjss-tailwindmaster', 'vjss-superfrontend', 'vjss-frontenddesign'],
+            'tailwindcss': ['vjss-tailwindmaster'],
+            'shadcn': ['vjss-tailwindmaster', 'vjss-reactexpert', 'vjss-frontenddesign'],
+            'css': ['vjss-cssgridpro', 'vjss-tailwindmaster'],
+            'grid': ['vjss-cssgridpro'],
+            'flexbox': ['vjss-cssgridpro'],
+            'ios': ['vjss-ios-swift-ui', 'vjss-expoexpert', 'vjss-reactnativeexpert'],
+            'swift': ['vjss-ios-swift-ui'],
+            'swiftui': ['vjss-ios-swift-ui'],
+            'android': ['vjss-androidkotlin', 'vjss-expoexpert'],
+            'kotlin': ['vjss-androidkotlin'],
+            'compose': ['vjss-androidkotlin'],
+            'expo': ['vjss-expoexpert'],
+            'reactnative': ['vjss-reactnativeexpert', 'vjss-expoexpert'],
+            'ionic': ['vjss-ionicpro'],
+            'capacitor': ['vjss-ionicpro'],
+            'framer': ['vjss-animationspecialist', 'vjss-frontenddesign'],
+            'gsap': ['vjss-animationspecialist'],
+            'animation': ['vjss-animationspecialist'],
+            'threejs': ['vjss-webgl-wizard'],
+            'webgl': ['vjss-webgl-wizard'],
+            'shaders': ['vjss-webgl-wizard'],
+            'd3': ['vjss-d3visualizer', 'vjss-wealth-ui-engineer'],
+            'd3js': ['vjss-d3visualizer'],
+            'charts': ['vjss-d3visualizer', 'vjss-wealth-ui-engineer'],
+            'wealth': ['vjss-wealth-ui-engineer', 'vjss-frontenddesign'],
+            'dashboard': ['vjss-wealth-ui-engineer', 'vjss-superfrontend'],
+            'a11y': ['vjss-a11y-auditor'],
+            'wcag': ['vjss-a11y-auditor'],
+            'aria': ['vjss-a11y-auditor'],
+            'pwa': ['vjss-pwa-builder'],
+            'serviceworker': ['vjss-pwa-builder'],
+            'unity': ['vjss-unitymobile'],
+
+            # Security & QA
+            'owasp': ['vjss-owasp-validator', 'vjss-securityguidance', 'vjss-pentestbot', 'vjss-pentest-l2-validator'],
+            'sqli': ['vjss-owasp-validator', 'vjss-supersecurity'],
+            'xss': ['vjss-owasp-validator', 'vjss-supersecurity'],
+            'csrf': ['vjss-owasp-validator'],
+            'ssrf': ['vjss-owasp-validator'],
+            'pentest': ['vjss-pentest-l2-validator', 'vjss-pentestbot'],
+            'trivy': ['vjss-pentest-l2-validator'],
+            'cve': ['vjss-pentest-l2-validator'],
+            'ciso': ['vjss-ciso-governance', 'vjss-zero-trust-sme'],
+            'iso27001': ['vjss-ciso-governance'],
+            'soc2': ['vjss-ciso-governance'],
+            'zerotrust': ['vjss-zero-trust-sme', 'vjss-ciso-governance'],
+            'saml': ['vjss-zero-trust-sme', 'vjss-authsystembuilder'],
+            'oauth': ['vjss-authsystembuilder', 'vjss-zero-trust-sme'],
+            'oauth2': ['vjss-authsystembuilder'],
+            'jwt': ['vjss-authsystembuilder'],
+            'rbac': ['vjss-authsystembuilder', 'vjss-iam-policy-expert', 'vjss-zero-trust-sme'],
+            'encryption': ['vjss-encryptionexpert'],
+            'aes': ['vjss-encryptionexpert'],
+            'tls': ['vjss-encryptionexpert', 'vjss-nginxmaster'],
+            'firewall': ['vjss-firewallwiz', 'vjss-soc-l1-analyst'],
+            'ufw': ['vjss-firewallwiz'],
+            'iptables': ['vjss-firewallwiz'],
+            'soc': ['vjss-soc-l1-analyst', 'vjss-secops-l3-hunter'],
+            'siem': ['vjss-secops-l3-hunter', 'vjss-soc-l1-analyst'],
+            'threat': ['vjss-threatmodeler', 'vjss-secops-l3-hunter'],
+            'stride': ['vjss-threatmodeler'],
+            'pii': ['vjss-piiscanner', 'vjss-privacy-airgap-shield'],
+            'airgap': ['vjss-privacy-airgap-shield'],
+            'privacy': ['vjss-privacy-airgap-shield', 'vjss-compliancechecker'],
+            'gdpr': ['vjss-compliancechecker', 'vjss-piiscanner'],
+            'hipaa': ['vjss-compliancechecker'],
+            'cypress': ['vjss-e2-ecypress', 'vjss-browsertester'],
+            'e2e': ['vjss-e2-ecypress', 'vjss-browsertester'],
+            'playwright': ['vjss-browsertester', 'vjss-e2-ecypress'],
+            'jest': ['vjss-unittestjest', 'vjss-qa-test-l1'],
+            'vitest': ['vjss-unittestjest'],
+            'pytest': ['vjss-qa-test-l1', 'vjss-coverageoptimizer'],
+            'coverage': ['vjss-coverageoptimizer'],
+            'k6': ['vjss-load-tester-k6'],
+            'loadtesting': ['vjss-load-tester-k6'],
+            'stress': ['vjss-load-tester-k6'],
+            'mutation': ['vjss-mutationtesting'],
+            'chaos': ['vjss-chaosmonkey'],
+            'browserstack': ['vjss-browserstack-pro'],
+            'visualregression': ['vjss-visualregression', 'vjss-uiperfectionist'],
+
+            # Trading & Fintech
             'quant': ['vjss-quant-architect', 'vjss-quant-science-sme', 'vjss-algobacktester', 'vjss-optionschainanalyzer'],
             'trading': ['vjss-quant-architect', 'vjss-quant-science-sme', 'vjss-algobacktester', 'vjss-optionschainanalyzer', 'vjss-forexexpert'],
-            'owasp': ['vjss-owasp-validator', 'vjss-securityguidance', 'vjss-pentestbot', 'vjss-pentest-l2-validator'],
-            'security': ['vjss-supersecurity', 'vjss-owasp-validator', 'vjss-securityguidance', 'vjss-threatmodeler', 'vjss-pentestbot', 'vjss-zero-trust-sme', 'vjss-ciso-governance'],
-            'testing': ['vjss-unittestjest', 'vjss-e2-ecypress', 'vjss-apitester', 'vjss-load-tester-k6', 'vjss-qa-test-l1', 'vjss-poka-yoke-sre'],
-            'cicd': ['vjss-ci-cd-pipeline-builder', 'vjss-gitworkflow', 'vjss-superdevops'],
-            'aws': ['vjss-awsarchitect', 'vjss-iam-policy-expert'],
-            'azure': ['vjss-azurearchitect'],
-            'gcp': ['vjss-gcp-pro'],
-            'git': ['vjss-gitmaster', 'vjss-gitworkflow', 'vjss-superdevops'],
-            'copilot': ['vjss-universal-copilot'],
+            'rally': ['vjss-quant-science-sme', 'vjss-quant-architect'],
+            'atr': ['vjss-quant-science-sme', 'vjss-quant-architect'],
+            'trailing': ['vjss-quant-science-sme', 'vjss-quant-architect'],
+            'backtest': ['vjss-algobacktester', 'vjss-quant-architect'],
+            'backtester': ['vjss-algobacktester'],
+            'tick': ['vjss-algobacktester', 'vjss-demathistorian', 'vjss-data-pipeline-l1'],
+            'options': ['vjss-optionschainanalyzer'],
+            'greeks': ['vjss-optionschainanalyzer'],
+            'delta': ['vjss-optionschainanalyzer'],
+            'gamma': ['vjss-optionschainanalyzer'],
+            'theta': ['vjss-optionschainanalyzer'],
+            'nifty': ['vjss-optionschainanalyzer'],
+            'banknifty': ['vjss-optionschainanalyzer'],
+            'crypto': ['vjss-cryptoauditor', 'vjss-cryptotracker'],
+            'solidity': ['vjss-cryptoauditor'],
+            'forex': ['vjss-forexexpert'],
+            'insidertrading': ['vjss-insidertradingmonitor'],
+            'bulkdeals': ['vjss-insidertradingmonitor'],
+            'dividend': ['vjss-dividendtracker'],
+            'portfolio': ['vjss-portfoliooptimizer'],
+            'sharpe': ['vjss-portfoliooptimizer'],
+            'tax': ['vjss-taxoptimizer'],
+            'stcg': ['vjss-taxoptimizer'],
+            'ltcg': ['vjss-taxoptimizer'],
+            'risk': ['vjss-riskmanagementbot', 'vjss-risk-auditor'],
+            'drawdown': ['vjss-riskmanagementbot'],
+
+            # Scientific Research & PhD
             'phd': ['vjss-phd-scholar', 'vjss-academic-humanizer', 'vjss-scientific-paper-writer', 'vjss-bioinformatics-expert'],
+            'dissertation': ['vjss-phd-scholar'],
+            'prisma': ['vjss-phd-scholar'],
             'academic': ['vjss-academic-humanizer', 'vjss-phd-scholar', 'vjss-scientific-paper-writer'],
-            'ciso': ['vjss-ciso-governance', 'vjss-zero-trust-sme'],
-            'kaizen': ['vjss-kaizen-sme', 'vjss-poka-yoke-sre'],
-            'itsm': ['vjss-itsm-l1-servicedesk', 'vjss-itsm-l3-commander', 'vjss-service-delivery-vp'],
-            'universal': ['vjss-universal-copilot', 'vjss-superadmin', 'vjss-strategic-overseer', 'vjss-universal-project-adapter']
+            'humanizer': ['vjss-academic-humanizer'],
+            'paper': ['vjss-scientific-paper-writer'],
+            'journal': ['vjss-scientific-paper-writer'],
+            'latex': ['vjss-scientific-paper-writer', 'vjss-phd-scholar'],
+            'bibtex': ['vjss-scientific-paper-writer', 'vjss-phd-scholar'],
+            'bioinformatics': ['vjss-bioinformatics-expert'],
+            'genomics': ['vjss-bioinformatics-expert'],
+            'proteomics': ['vjss-bioinformatics-expert'],
+            'biopython': ['vjss-bioinformatics-expert'],
+
+            # Universal & Orchestration
+            'copilot': ['vjss-universal-copilot'],
+            'universal': ['vjss-universal-copilot', 'vjss-superadmin', 'vjss-strategic-overseer', 'vjss-universal-project-adapter'],
+            'git': ['vjss-gitmaster', 'vjss-gitworkflow', 'vjss-superdevops'],
+            'rebase': ['vjss-gitmaster'],
+            'commits': ['vjss-gitworkflow'],
+            'github': ['vjss-gitworkflow', 'vjss-ci-cd-pipeline-builder'],
+            'jira': ['vjss-jiramanager'],
+            'sprint': ['vjss-jiramanager'],
+            'agile': ['vjss-jiramanager', 'vjss-featuredev'],
+            'notion': ['vjss-notionarchitect'],
+            'slack': ['vjss-slackbotbuilder'],
+            'discord': ['vjss-slackbotbuilder'],
+            'email': ['vjss-emailtriage'],
+            'meeting': ['vjss-meetingsummarizer'],
+            'calendar': ['vjss-calendaroptimizer'],
+            'regex': ['vjss-regexmaster'],
+            'shell': ['vjss-shellexpert', 'vjss-superadmin'],
+            'bash': ['vjss-shellexpert'],
+            'zsh': ['vjss-shellexpert'],
+            'cron': ['vjss-superadmin', 'vjss-infra-l2-automation'],
+            'smartcontext': ['vjss-smartcontext'],
+            'memory': ['vjss-smartcontext', 'vjss-super-vjbrain'],
+            'cleanarchitecture': ['vjss-clean-architecture-sme'],
+            'hexagonal': ['vjss-clean-architecture-sme'],
+            'ddd': ['vjss-clean-architecture-sme'],
+            'codereview': ['vjss-codereview', 'vjss-superreviewer'],
+            'superdebugger': ['vjss-superdebugger', 'vjss-superhealing'],
+            'debugging': ['vjss-superdebugger', 'vjss-loganalyzer'],
+            'superhealing': ['vjss-superhealing', 'vjss-superintelligent'],
+            'superparallel': ['vjss-superparallel'],
+            'multithreading': ['vjss-superparallel'],
+            'vjbrain': ['vjss-super-vjbrain']
         }
-        keyword_map = dict(alias_map)
         
-        for slug, data in clean_index.items():
+        # Merge corpus words from metadata
+        for slug, data in skill_index.items():
             corpus = f"{slug} {data['original_name']} {data['domain']} {data['category']} {data['description']}"
             words = re.findall(r'[A-Za-z0-9]+', corpus.lower())
             for w in words:
@@ -698,12 +509,12 @@ def build_all():
                         keyword_map[w].append(slug)
                         
         r.set('vjp:skills:index', json.dumps(keyword_map))
-        print(f"⚡ Redis skill registry & {len(keyword_map)}-token keyword index synchronized successfully!")
+        print(f"⚡ Redis skill registry & {len(keyword_map)}-token keyword matrix synchronized successfully!")
     except Exception as e:
         print(f"⚠️ Redis sync notice: {e}")
 
-    print(f"✅ Successfully compiled, enriched and deployed all {skills_processed} VJSS skills to Antigravity-native format!")
-    return clean_index
+    print(f"✅ Master Build Complete: All 161 skills synchronized across workspace, global cache, categories, web catalog, and Redis!")
+    return skill_index
 
 if __name__ == "__main__":
     build_all()

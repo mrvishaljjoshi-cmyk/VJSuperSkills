@@ -300,17 +300,39 @@ def cmd_list(args):
 
 def cmd_search(args):
     print_banner()
-    keyword = args.query.lower()
+    keyword = args.query.lower().strip()
     print(f"🔍 Searching VJSS 161 skills for keyword: '\033[1m{keyword}\033[0m'...\n")
     
-    skills_json = os.path.join(os.getcwd(), ".agents", "skills.json")
     matches = []
+    seen = set()
+    
+    # 1. Check Redis Fast Keyword Index
+    try:
+        import redis
+        r = redis.Redis(host='127.0.0.1', port=6379, db=0)
+        idx = r.get('vjp:skills:index')
+        reg = r.get('vjp:skills:registry')
+        if idx and reg:
+            idx_data = json.loads(idx)
+            reg_data = json.loads(reg)
+            if keyword in idx_data:
+                for slug in idx_data[keyword]:
+                    if slug not in seen:
+                        seen.add(slug)
+                        desc = reg_data.get(slug, {}).get('domain', slug)
+                        matches.append((slug, desc))
+    except Exception:
+        pass
+
+    # 2. Check local skills.json corpus
+    skills_json = os.path.join(os.getcwd(), ".agents", "skills.json")
     if os.path.exists(skills_json):
-        with open(skills_json, "r", encoding="utf-8") as f:
+        with open(skills_json, 'r') as f:
             data = json.load(f)
         for s, info in data.items():
             corpus = f"{s} {info.get('domain', '')} {info.get('description', '')}".lower()
-            if keyword in corpus:
+            if keyword in corpus and s not in seen:
+                seen.add(s)
                 matches.append((s, info.get('domain', s)))
                 
     if matches:
