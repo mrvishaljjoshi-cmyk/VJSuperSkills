@@ -1,0 +1,73 @@
+# ==============================================================================
+# VJSS: Universal AI Agent Super-Skills .gitignore (Privacy & State Protection)
+# ==============================================================================
+
+# Local Machine Runtime State & Caches (100% Data Sovereignty)
+.agents/
+.agent/
+_agents/
+_agent/
+*.json.bak
+*.bak
+
+# Local Backup & Version Control Archives
+archive_vX_*/
+archive_*/
+backups/
+
+# Python Bytecode & Environments
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+venv/
+.venv/
+env/
+.env
+
+# Logs & Runtime Dumps
+*.log
+*.log.*
+/tmp/
+logs/
+
+# Sensitive & Secret Files
+*.pem
+*.key
+*.crt
+*.pfx
+*.p12
+*.secret
+credentials.json
+secrets.json
+
+# IDE & OS Metadata
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json

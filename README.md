@@ -21,10 +21,11 @@
 ## ⚡ THE CORE PHILOSOPHY: "INSTALL 1st → AUTO-CALL REST"
 
 > [!IMPORTANT]
-> **MANDATORY STARTUP & TOKEN EFFICIENCY PROTOCOL:**
-> 1. **Always Load On Session Start:** Every AI agent must initialize [`VJSS_UniversalCopilot`](txt_skills/VJSS_UniversalCopilot.txt) on turn 1 of every conversation.
-> 2. **Absolute Priority = Save Tokens:** Enforce the 80/20 rule (80% value in 20% tokens), targeted line-reads, and log truncation to keep context fast and cheap.
-> 3. **Auto-Call Specialized Skills:** When a domain task is encountered (FastAPI, Docker, React, K8s, OWASP, ATR Backtesting), the AI agent **autonomously loads that matching skill in the background**. **Zero manual copying of 130 files!**
+> **MANDATORY STARTUP, PRIVACY & TOKEN EFFICIENCY PROTOCOL:**
+> 1. **100% Local-First Data Sovereignty (Zero Data Egress):** VJSS is completely private and on-device. All project context, conversation memory, and code analysis stay strictly on `127.0.0.1` or your local filesystem. **Zero telemetry, zero tracking, zero third-party analytics.**
+> 2. **Always Load On Session Start:** Every AI agent must initialize [`VJSS_UniversalCopilot`](txt_skills/VJSS_UniversalCopilot.txt) on turn 1 of every conversation.
+> 3. **Absolute Priority = Save Tokens (80/20 Rule):** Keep context fast and cheap via targeted line reads, compact runbooks, and Redis SmartContext.
+> 4. **Auto-Call Specialized Skills & JIT Fetch:** When a domain task is encountered (FastAPI, Docker, React, K8s, OWASP, ATR Backtesting), the AI agent **autonomously loads or JIT-fetches that matching skill in the background**. Zero manual file hunting!
 
 ```
                      USER PROMPT (Natural language, brief, or typos)
@@ -66,26 +67,33 @@
 
 ## 🚀 1-Command Universal Installation (All Tools)
 
-Clone the repository and run the automated installer:
+### Option A: Remote 1-Liner (Zero Clone Needed)
+```bash
+# Linux / macOS (All 6 AI Tools):
+curl -fsSL https://raw.githubusercontent.com/mrvishaljjoshi-cmyk/VJSS/main/install.sh | bash -s -- --all
 
+# Windows PowerShell:
+irm https://raw.githubusercontent.com/mrvishaljjoshi-cmyk/VJSS/main/install.ps1 | iex
+```
+
+### Option B: Local Clone & Target Tool Installer
 ```bash
 git clone https://github.com/mrvishaljjoshi-cmyk/VJSS.git
 cd VJSS
 ./install.sh
 ```
 
-Or install directly for your specific tool in 1 line:
-
 | Tool | 1-Line Command | What It Does |
 | :--- | :--- | :--- |
-| **🟣 Claude Code CLI** | `./install.sh --claude` | Injects `VJSS_UniversalCopilot` into `./CLAUDE.md` memory |
-| **🔵 Antigravity CLI** | `./install.sh --agy` | Syncs all 130 skills globally to `~/.gemini/config/skills/` |
-| **🟡 Cursor IDE** | `./install.sh --cursor` | Sets `.cursorrules` and copies modular skills to `.cursor/rules/` |
-| **🌊 Windsurf IDE** | `./install.sh --windsurf` | Generates `.windsurfrules` for Cascade AI |
-| **🟢 VS Code (Copilot/Roo/Cline)** | `./install.sh --vscode` | Generates `.github/copilot-instructions.md` |
-| **⭐ ALL TOOLS** | `./install.sh --all` | Configures all 5 coding tools in one go |
+| **🔵 Google Antigravity & Gemini CLI** | `./install.sh --agy` | Syncs 130 native progressive disclosure skills to `~/.gemini/config/skills/` |
+| **🟣 Claude Code CLI** | `./install.sh --claude` | Injects VJSS Bootloader into `./CLAUDE.md` with JIT skill fetcher |
+| **🟡 Cursor IDE** | `./install.sh --cursor` | Configures `./.cursorrules` and `./.cursor/rules/vjss_universal_copilot.mdc` |
+| **🌊 Windsurf IDE (Cascade)** | `./install.sh --windsurf` | Configures `./.windsurfrules` with 80/20 token shield |
+| **🟢 VS Code & GitHub Copilot** | `./install.sh --vscode` | Generates `./.github/copilot-instructions.md` |
+| **🤖 Roo Code & Cline** | `./install.sh --cline` | Generates `./.clinerules` and `./.roomodes` |
+| **⭐ ALL TOOLS** | `./install.sh --all` | Configures all 6 coding tools in one click |
 
-*(Windows users: double-click `install.bat`)*
+*(Windows users: run `install.bat` or `install.ps1`)*
 
 ---
 

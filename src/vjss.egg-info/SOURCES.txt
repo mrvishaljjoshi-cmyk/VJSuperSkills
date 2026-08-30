@@ -2,7 +2,10 @@ README.md
 README.txt
 pyproject.toml
 src/vjss/__init__.py
+src/vjss/build_native_skills.py
 src/vjss/cli.py
+src/vjss/context_manager.py
+src/vjss/memory_engine.py
 src/vjss.egg-info/PKG-INFO
 src/vjss.egg-info/SOURCES.txt
 src/vjss.egg-info/dependency_links.txt
