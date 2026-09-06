@@ -1,16 +1,9 @@
-================================================================================
-SKILL PROTOCOL : VJSS_Optionschainanalyzer
-DOMAIN         : Optionschainanalyzer Enterprise Engineering & Production Protocol
-CATEGORY       : 05_Trading_Fintech_Strategy
-CREATOR & LEAD : Mr. Vishalkumar Joshi
-EMAIL          : mrvishaljjoshi@gmail.com
-WEBSITE        : https://vjprojects.co.in
-GITHUB PROFILE : https://github.com/mrvishaljjoshi-cmyk
-REPOSITORY     : https://github.com/mrvishaljjoshi-cmyk/VJSS
-DESCRIPTION    : Advanced options chain intelligence for NIFTY, BANKNIFTY, and FINNIFTY. Provides real-time strike suggestion, Greek analysis, and automated execution logic.
-VERSION        : 2.4.0 Master Production Standard (1000+ Lines)
-COMPATIBILITY  : Universal (Claude Code, Antigravity CLI, Cursor, Windsurf, VS Code)
-================================================================================
+---
+author: Vishal Joshi <vishaljoshi9694@gmail.com>
+sector: Trading Fintech Strategy
+name: VJSS_Optionschainanalyzer
+description: Advanced options chain intelligence for NIFTY, BANKNIFTY, and FINNIFTY. Provides real-time strike suggestion, Greek analysis, and automated execution logic.
+---
 
 # 🌟 VJSS_Optionschainanalyzer: Exhaustive Optionschainanalyzer Enterprise Master Architecture Manual
 

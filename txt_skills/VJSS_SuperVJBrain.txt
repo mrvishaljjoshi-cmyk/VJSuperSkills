@@ -1,16 +1,9 @@
-================================================================================
-SKILL PROTOCOL : VJSS_SuperVJBrain
-DOMAIN         : SuperVJBrain Enterprise Engineering & Production Protocol
-CATEGORY       : 06_Universal_Orchestration_Operations
-CREATOR & LEAD : Mr. Vishalkumar Joshi
-EMAIL          : mrvishaljjoshi@gmail.com
-WEBSITE        : https://vjprojects.co.in
-GITHUB PROFILE : https://github.com/mrvishaljjoshi-cmyk
-REPOSITORY     : https://github.com/mrvishaljjoshi-cmyk/VJSS
-DESCRIPTION    : The ultimate Master Orchestrator for the VJSuperSkills ecosystem. Features autonomous skill discovery, token-optimized planning, and a 30-second delayed startup heartbeat.
-VERSION        : 2.4.0 Master Production Standard (1000+ Lines)
-COMPATIBILITY  : Universal (Claude Code, Antigravity CLI, Cursor, Windsurf, VS Code)
-================================================================================
+---
+author: Vishal Joshi <vishaljoshi9694@gmail.com>
+sector: Universal Orchestration Operations
+name: VJSS_SuperVJBrain
+description: The ultimate Master Orchestrator for the VJSuperSkills ecosystem. Features autonomous skill discovery, token-optimized planning, and a 30-second delayed startup heartbeat.
+---
 
 # 🌟 VJSS_SuperVJBrain: Exhaustive SuperVJBrain Enterprise Master Architecture Manual
 

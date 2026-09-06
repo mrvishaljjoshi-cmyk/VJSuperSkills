@@ -1,16 +1,9 @@
-================================================================================
-SKILL PROTOCOL : VJSS_FintechDevops
-DOMAIN         : FintechDevops Enterprise Engineering & Production Protocol
-CATEGORY       : 02_Backend_Cloud_DevOps
-CREATOR & LEAD : Mr. Vishalkumar Joshi
-EMAIL          : mrvishaljjoshi@gmail.com
-WEBSITE        : https://vjprojects.co.in
-GITHUB PROFILE : https://github.com/mrvishaljjoshi-cmyk
-REPOSITORY     : https://github.com/mrvishaljjoshi-cmyk/VJSS
-DESCRIPTION    : Head of Core Infrastructure & DBRE. Use for MariaDB/Redis management, Linux server optimization and performance tuning, background service (PM2/Systemd) configuration, and network security.
-VERSION        : 2.4.0 Master Production Standard (1000+ Lines)
-COMPATIBILITY  : Universal (Claude Code, Antigravity CLI, Cursor, Windsurf, VS Code)
-================================================================================
+---
+author: Vishal Joshi <vishaljoshi9694@gmail.com>
+sector: Backend Cloud DevOps
+name: VJSS_FintechDevops
+description: Head of Core Infrastructure & DBRE. Use for MariaDB/Redis management, Linux server optimization and performance tuning, background service (PM2/Systemd) configuration, and network security.
+---
 
 # 🌟 VJSS_FintechDevops: Exhaustive FintechDevops Enterprise Master Architecture Manual
 

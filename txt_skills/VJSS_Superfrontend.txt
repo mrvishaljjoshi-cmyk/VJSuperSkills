@@ -1,16 +1,9 @@
-================================================================================
-SKILL PROTOCOL : VJSS_Superfrontend
-DOMAIN         : Superfrontend Enterprise Engineering & Production Protocol
-CATEGORY       : 03_Frontend_Mobile_UI
-CREATOR & LEAD : Mr. Vishalkumar Joshi
-EMAIL          : mrvishaljjoshi@gmail.com
-WEBSITE        : https://vjprojects.co.in
-GITHUB PROFILE : https://github.com/mrvishaljjoshi-cmyk
-REPOSITORY     : https://github.com/mrvishaljjoshi-cmyk/VJSS
-DESCRIPTION    : Create distinctive, production-grade frontend interfaces. Use when building UI components, dashboards, or web applications with a focus on bold aesthetics and creative design.
-VERSION        : 2.4.0 Master Production Standard (1000+ Lines)
-COMPATIBILITY  : Universal (Claude Code, Antigravity CLI, Cursor, Windsurf, VS Code)
-================================================================================
+---
+author: Vishal Joshi <vishaljoshi9694@gmail.com>
+sector: Frontend Mobile UI
+name: VJSS_Superfrontend
+description: Create distinctive, production-grade frontend interfaces. Use when building UI components, dashboards, or web applications with a focus on bold aesthetics and creative design.
+---
 
 # 🌟 VJSS_Superfrontend: Exhaustive Superfrontend Enterprise Master Architecture Manual
 

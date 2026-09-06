@@ -1,16 +1,9 @@
-================================================================================
-SKILL PROTOCOL : VJSS_E2ECypress
-DOMAIN         : E2ECypress Enterprise Engineering & Production Protocol
-CATEGORY       : 04_Security_Quality_Testing
-CREATOR & LEAD : Mr. Vishalkumar Joshi
-EMAIL          : mrvishaljjoshi@gmail.com
-WEBSITE        : https://vjprojects.co.in
-GITHUB PROFILE : https://github.com/mrvishaljjoshi-cmyk
-REPOSITORY     : https://github.com/mrvishaljjoshi-cmyk/VJSS
-DESCRIPTION    : Universal high-performance E2ECypress skill for autonomous AI agents and pair-programming assistants.
-VERSION        : 2.4.0 Master Production Standard (1000+ Lines)
-COMPATIBILITY  : Universal (Claude Code, Antigravity CLI, Cursor, Windsurf, VS Code)
-================================================================================
+---
+author: Vishal Joshi <vishaljoshi9694@gmail.com>
+sector: Security Quality Testing
+name: VJSS_E2ECypress
+description: Universal high-performance E2ECypress skill for autonomous AI agents and pair-programming assistants.
+---
 
 # 🌟 VJSS_E2ECypress: Exhaustive E2ECypress Enterprise Master Architecture Manual
 

@@ -1,16 +1,9 @@
-================================================================================
-SKILL PROTOCOL : VJSS_Emailtriage
-DOMAIN         : Emailtriage Enterprise Engineering & Production Protocol
-CATEGORY       : 06_Universal_Orchestration_Operations
-CREATOR & LEAD : Mr. Vishalkumar Joshi
-EMAIL          : mrvishaljjoshi@gmail.com
-WEBSITE        : https://vjprojects.co.in
-GITHUB PROFILE : https://github.com/mrvishaljjoshi-cmyk
-REPOSITORY     : https://github.com/mrvishaljjoshi-cmyk/VJSS
-DESCRIPTION    : Universal high-performance Emailtriage skill for autonomous AI agents and pair-programming assistants.
-VERSION        : 2.4.0 Master Production Standard (1000+ Lines)
-COMPATIBILITY  : Universal (Claude Code, Antigravity CLI, Cursor, Windsurf, VS Code)
-================================================================================
+---
+author: Vishal Joshi <vishaljoshi9694@gmail.com>
+sector: Universal Orchestration Operations
+name: VJSS_Emailtriage
+description: Universal high-performance Emailtriage skill for autonomous AI agents and pair-programming assistants.
+---
 
 # 🌟 VJSS_Emailtriage: Exhaustive Emailtriage Enterprise Master Architecture Manual
 

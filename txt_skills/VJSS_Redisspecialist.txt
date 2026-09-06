@@ -1,16 +1,9 @@
-================================================================================
-SKILL PROTOCOL : VJSS_Redisspecialist
-DOMAIN         : Redisspecialist Enterprise Engineering & Production Protocol
-CATEGORY       : 02_Backend_Cloud_DevOps
-CREATOR & LEAD : Mr. Vishalkumar Joshi
-EMAIL          : mrvishaljjoshi@gmail.com
-WEBSITE        : https://vjprojects.co.in
-GITHUB PROFILE : https://github.com/mrvishaljjoshi-cmyk
-REPOSITORY     : https://github.com/mrvishaljjoshi-cmyk/VJSS
-DESCRIPTION    : Universal high-performance Redisspecialist skill for autonomous AI agents and pair-programming assistants.
-VERSION        : 2.4.0 Master Production Standard (1000+ Lines)
-COMPATIBILITY  : Universal (Claude Code, Antigravity CLI, Cursor, Windsurf, VS Code)
-================================================================================
+---
+author: Vishal Joshi <vishaljoshi9694@gmail.com>
+sector: Backend Cloud DevOps
+name: VJSS_Redisspecialist
+description: Universal high-performance Redisspecialist skill for autonomous AI agents and pair-programming assistants.
+---
 
 # 🌟 VJSS_Redisspecialist: Exhaustive Redisspecialist Enterprise Master Architecture Manual
 

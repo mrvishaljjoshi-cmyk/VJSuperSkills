@@ -1,16 +1,9 @@
-================================================================================
-SKILL PROTOCOL : VJSS_Superparallel
-DOMAIN         : Superparallel Enterprise Engineering & Production Protocol
-CATEGORY       : 06_Universal_Orchestration_Operations
-CREATOR & LEAD : Mr. Vishalkumar Joshi
-EMAIL          : mrvishaljjoshi@gmail.com
-WEBSITE        : https://vjprojects.co.in
-GITHUB PROFILE : https://github.com/mrvishaljjoshi-cmyk
-REPOSITORY     : https://github.com/mrvishaljjoshi-cmyk/VJSS
-DESCRIPTION    : Multi-threaded execution engine for batch processing. Use this to run multiple shell commands or file analyses simultaneously across available CPU cores.
-VERSION        : 2.4.0 Master Production Standard (1000+ Lines)
-COMPATIBILITY  : Universal (Claude Code, Antigravity CLI, Cursor, Windsurf, VS Code)
-================================================================================
+---
+author: Vishal Joshi <vishaljoshi9694@gmail.com>
+sector: Universal Orchestration Operations
+name: VJSS_Superparallel
+description: Multi-threaded execution engine for batch processing. Use this to run multiple shell commands or file analyses simultaneously across available CPU cores.
+---
 
 # 🌟 VJSS_Superparallel: Exhaustive Superparallel Enterprise Master Architecture Manual
 

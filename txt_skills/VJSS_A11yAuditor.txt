@@ -1,16 +1,9 @@
-================================================================================
-SKILL PROTOCOL : VJSS_A11yAuditor
-DOMAIN         : A11yAuditor Enterprise Engineering & Production Protocol
-CATEGORY       : 03_Frontend_Mobile_UI
-CREATOR & LEAD : Mr. Vishalkumar Joshi
-EMAIL          : mrvishaljjoshi@gmail.com
-WEBSITE        : https://vjprojects.co.in
-GITHUB PROFILE : https://github.com/mrvishaljjoshi-cmyk
-REPOSITORY     : https://github.com/mrvishaljjoshi-cmyk/VJSS
-DESCRIPTION    : Universal high-performance A11yAuditor skill for autonomous AI agents and pair-programming assistants.
-VERSION        : 2.4.0 Master Production Standard (1000+ Lines)
-COMPATIBILITY  : Universal (Claude Code, Antigravity CLI, Cursor, Windsurf, VS Code)
-================================================================================
+---
+author: Vishal Joshi <vishaljoshi9694@gmail.com>
+sector: Frontend Mobile UI
+name: VJSS_A11yAuditor
+description: Universal high-performance A11yAuditor skill for autonomous AI agents and pair-programming assistants.
+---
 
 # 🌟 VJSS_A11yAuditor: Exhaustive A11yAuditor Enterprise Master Architecture Manual
 

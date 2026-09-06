@@ -1,16 +1,9 @@
-================================================================================
-SKILL PROTOCOL : VJSS_Superarchitect
-DOMAIN         : Superarchitect Enterprise Engineering & Production Protocol
-CATEGORY       : 06_Universal_Orchestration_Operations
-CREATOR & LEAD : Mr. Vishalkumar Joshi
-EMAIL          : mrvishaljjoshi@gmail.com
-WEBSITE        : https://vjprojects.co.in
-GITHUB PROFILE : https://github.com/mrvishaljjoshi-cmyk
-REPOSITORY     : https://github.com/mrvishaljjoshi-cmyk/VJSS
-DESCRIPTION    : Global system design and codebase mapping. Use when starting new projects, refactoring legacy systems, or understanding complex cross-component dependencies in any AI agent environment.
-VERSION        : 2.4.0 Master Production Standard (1000+ Lines)
-COMPATIBILITY  : Universal (Claude Code, Antigravity CLI, Cursor, Windsurf, VS Code)
-================================================================================
+---
+author: Vishal Joshi <vishaljoshi9694@gmail.com>
+sector: Universal Orchestration Operations
+name: VJSS_Superarchitect
+description: Global system design and codebase mapping. Use when starting new projects, refactoring legacy systems, or understanding complex cross-component dependencies in any AI agent environment.
+---
 
 # 🌟 VJSS_Superarchitect: Exhaustive Superarchitect Enterprise Master Architecture Manual
 

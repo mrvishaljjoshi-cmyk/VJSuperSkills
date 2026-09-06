@@ -1,16 +1,9 @@
-================================================================================
-SKILL PROTOCOL : VJSS_Superreviewer
-DOMAIN         : Superreviewer Enterprise Engineering & Production Protocol
-CATEGORY       : 06_Universal_Orchestration_Operations
-CREATOR & LEAD : Mr. Vishalkumar Joshi
-EMAIL          : mrvishaljjoshi@gmail.com
-WEBSITE        : https://vjprojects.co.in
-GITHUB PROFILE : https://github.com/mrvishaljjoshi-cmyk
-REPOSITORY     : https://github.com/mrvishaljjoshi-cmyk/VJSS
-DESCRIPTION    : Professional-grade automated code review. Use to audit changes for bugs, security leaks, and architectural integrity. Focuses on high-signal feedback and automated validation.
-VERSION        : 2.4.0 Master Production Standard (1000+ Lines)
-COMPATIBILITY  : Universal (Claude Code, Antigravity CLI, Cursor, Windsurf, VS Code)
-================================================================================
+---
+author: Vishal Joshi <vishaljoshi9694@gmail.com>
+sector: Universal Orchestration Operations
+name: VJSS_Superreviewer
+description: Professional-grade automated code review. Use to audit changes for bugs, security leaks, and architectural integrity. Focuses on high-signal feedback and automated validation.
+---
 
 # 🌟 VJSS_Superreviewer: Exhaustive Superreviewer Enterprise Master Architecture Manual
 

@@ -1,16 +1,9 @@
-================================================================================
-SKILL PROTOCOL : VJSS_QuantArchitect
-DOMAIN         : QuantArchitect Enterprise Engineering & Production Protocol
-CATEGORY       : 05_Trading_Fintech_Strategy
-CREATOR & LEAD : Mr. Vishalkumar Joshi
-EMAIL          : mrvishaljjoshi@gmail.com
-WEBSITE        : https://vjprojects.co.in
-GITHUB PROFILE : https://github.com/mrvishaljjoshi-cmyk
-REPOSITORY     : https://github.com/mrvishaljjoshi-cmyk/VJSS
-DESCRIPTION    : Head of Quantitative Strategy & Alpha Labs. Use for algorithmic trading logic, strategy refactoring, backtesting analysis, and mathematical modeling for quantitative finance models and automated execution engines.
-VERSION        : 2.4.0 Master Production Standard (1000+ Lines)
-COMPATIBILITY  : Universal (Claude Code, Antigravity CLI, Cursor, Windsurf, VS Code)
-================================================================================
+---
+author: Vishal Joshi <vishaljoshi9694@gmail.com>
+sector: Trading Fintech Strategy
+name: VJSS_QuantArchitect
+description: Head of Quantitative Strategy & Alpha Labs. Use for algorithmic trading logic, strategy refactoring, backtesting analysis, and mathematical modeling for quantitative finance models and automated execution engines.
+---
 
 # 🌟 VJSS_QuantArchitect: Exhaustive QuantArchitect Enterprise Master Architecture Manual
 

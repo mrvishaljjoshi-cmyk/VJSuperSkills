@@ -1,16 +1,9 @@
-================================================================================
-SKILL PROTOCOL : VJSS_Reactnativeexpert
-DOMAIN         : Reactnativeexpert Enterprise Engineering & Production Protocol
-CATEGORY       : 03_Frontend_Mobile_UI
-CREATOR & LEAD : Mr. Vishalkumar Joshi
-EMAIL          : mrvishaljjoshi@gmail.com
-WEBSITE        : https://vjprojects.co.in
-GITHUB PROFILE : https://github.com/mrvishaljjoshi-cmyk
-REPOSITORY     : https://github.com/mrvishaljjoshi-cmyk/VJSS
-DESCRIPTION    : Universal high-performance Reactnativeexpert skill for autonomous AI agents and pair-programming assistants.
-VERSION        : 2.4.0 Master Production Standard (1000+ Lines)
-COMPATIBILITY  : Universal (Claude Code, Antigravity CLI, Cursor, Windsurf, VS Code)
-================================================================================
+---
+author: Vishal Joshi <vishaljoshi9694@gmail.com>
+sector: Frontend Mobile UI
+name: VJSS_Reactnativeexpert
+description: Universal high-performance Reactnativeexpert skill for autonomous AI agents and pair-programming assistants.
+---
 
 # 🌟 VJSS_Reactnativeexpert: Exhaustive Reactnativeexpert Enterprise Master Architecture Manual
 
