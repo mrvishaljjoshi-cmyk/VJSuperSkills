@@ -253,7 +253,7 @@ def generate_1000_line_manual(slug, domain, category):
         "",
         "---",
         "",
-        "## 2. 🏗️ COMPLETE INDUSTRY-STANDARD DIRECTORY & FILE LAYOUT",
+        "## 2. ⚡ STEP-BY-STEP PRODUCTION OPERATIONAL PROTOCOL (SOP) & DIRECTORY LAYOUT",
         "",
         f"A production-grade `{slug}` repository follows this standardized layout:",
         "```",
@@ -470,7 +470,7 @@ def generate_1000_line_manual(slug, domain, category):
         "",
         "---",
         "",
-        "## 5. 🛡️ ZERO-TRUST SECURITY, INPUT VALIDATION & HARDENING",
+        "## 5. 🛡️ SECURITY, ZERO-TRUST INPUT VALIDATION & HARDENING",
         "",
         "### Security Mandates",
         "1. **Input Sanitization:** All strings stripped of control characters, SQL injection tokens, and script tags.",
@@ -530,7 +530,7 @@ def generate_1000_line_manual(slug, domain, category):
         "",
         "---",
         "",
-        "## 7. 💥 FAILURE MODES, SELF-HEALING & DISASTER RECOVERY RUNBOOKS",
+        "## 7. 🔧 SELF-HEALING, FAILURE MODES & DISASTER RECOVERY RUNBOOKS",
         "",
         "| Failure Scenario | Detection Vector | Automated Recovery Action | Manual Runbook |",
         "| :--- | :--- | :--- | :--- |",
@@ -595,7 +595,7 @@ def generate_1000_line_manual(slug, domain, category):
         "",
         "---",
         "",
-        "## 10. ✅ PRODUCTION READINESS VERIFICATION CHECKLIST",
+        "## 10. ✅ DEFINITION OF DONE & PRODUCTION READINESS VERIFICATION CHECKLIST",
         "",
         "- [x] Strongly typed settings schema validated with Pydantic.",
         "- [x] Core execution engine wrapped in thread-safe state machine & circuit breaker.",
@@ -673,15 +673,13 @@ def run_enrichment():
         # Check existing SKILL.txt in category or old folder
         existing_txt = None
         for pattern in [
-            os.path.join(CATEGORIES_DIR, "*", slug, "SKILL.txt"),
-            os.path.join(CATEGORIES_DIR, "*", camel_name, "SKILL.txt"),
-            os.path.join(TXT_SKILLS_DIR, f"{camel_name}.txt")
+            os.path.join(CATEGORIES_DIR, "*", camel_name, "SKILL.txt")
         ]:
             matches = glob.glob(pattern)
             for m in matches:
                 with open(m, "r", encoding="utf-8", errors="ignore") as f:
                     c = f.read()
-                if len(c.splitlines()) >= 500:
+                if len(c.splitlines()) >= 500 and ("## 3. 📋 STEP-BY-STEP" in c or "## 2. ⚡ STEP-BY-STEP" in c):
                     existing_txt = c
                     break
             if existing_txt:
